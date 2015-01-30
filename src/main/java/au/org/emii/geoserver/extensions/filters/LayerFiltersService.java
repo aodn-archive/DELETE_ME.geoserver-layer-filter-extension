@@ -13,6 +13,7 @@ import au.org.emii.geoserver.extensions.filters.layer.data.FiltersDocument;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.FilterConfigurationFile;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
@@ -77,13 +78,17 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
         FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
         List<Filter> filters = file.getFilters();
-        new PossibleValuesReader().read(layerInfo, filters);
+        new PossibleValuesReader().read(getDataStoreInfo(workspace, layer), layerInfo, filters);
 
         return new FiltersDocument().build(filters);
     }
 
     private LayerInfo getLayerInfo(String workspace, String layer) {
         return LayerInfoProperties.getLayer(getCatalog(), workspace, layer);
+    }
+
+    private DataStoreInfo getDataStoreInfo(String workspace, String layer) {
+        return getCatalog().getDataStoreByName(workspace, getLayerInfo(workspace, layer).getResource().getStore().getName());
     }
 
     private String getLayerDataDirectoryPath(LayerInfo layerInfo) {

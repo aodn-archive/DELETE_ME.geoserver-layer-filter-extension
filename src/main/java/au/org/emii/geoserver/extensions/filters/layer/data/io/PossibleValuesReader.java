@@ -3,11 +3,14 @@ package au.org.emii.geoserver.extensions.filters.layer.data.io;
 import au.org.emii.geoserver.extensions.filters.layer.data.Filter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geotools.data.FeatureSource;
-import org.geotools.feature.FeatureCollection;
-import org.geotools.feature.FeatureIterator;
+import org.geotools.data.Query;
+import org.geotools.data.store.ContentDataStore;
+import org.geotools.data.store.ContentFeatureSource;
+import org.geotools.feature.visitor.UniqueVisitor;
 import org.opengis.feature.Feature;
 
 import java.io.IOException;
@@ -15,23 +18,26 @@ import java.util.*;
 
 public class PossibleValuesReader {
 
-    public List<Filter> read(LayerInfo layerInfo, List<Filter> filters) throws IOException {
-        setFilterValues(getValueFilters(filters), getFeatureSource(layerInfo).getFeatures());
-
+    public List<Filter> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, List<Filter> filters) throws IOException {
+        setFilterValues(dataStoreInfo, layerInfo, getValueFilters(filters), getFeatureSource(layerInfo));
         return filters;
     }
 
-    private void setFilterValues(List<Filter> filters, FeatureCollection featureCollection) throws IOException {
-        FeatureIterator features = featureCollection.features();
-        try {
-            Map<String, Set> filterValues = initFilterValues(filters);
+    private void setFilterValues(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, List<Filter> filters, FeatureSource featureSource) throws IOException {
+        ContentDataStore dataStore = (ContentDataStore)dataStoreInfo.getDataStore(null);
+        Query query = new Query(layerInfo.getName(), org.opengis.filter.Filter.INCLUDE, getFilterNames(filters));
 
-            while (features.hasNext()) {
-                collectFilterValues(features.next(), filters, filterValues);
-            }
-        }
-        finally {
-            features.close();
+        // Untried and may need some tweaking to get sorting occurring at the db level rather than relying on a TreeSet
+        //query.setSortBy(new SortBy[] { SortBy.NATURAL_ORDER });
+
+        for (Filter filter : filters) {
+            UniqueVisitor visitor = new UniqueVisitor(filter.getName());
+            ContentFeatureSource contentFeatureSource = dataStore.getFeatureSource((String)dataStoreInfo.getConnectionParameters().get("schema"));
+            contentFeatureSource.accepts(query, visitor, null);
+            System.out.println(contentFeatureSource.getFeatures());
+
+            // Need to do some sort of transformation to get a FeatureCollection to a Set
+            //filter.setValues(new TreeSet<String>(contentFeatureSource.getFeatures()));
         }
     }
 
@@ -43,14 +49,6 @@ public class PossibleValuesReader {
         }
 
         return filterValues;
-    }
-
-    private void collectFilterValues(Feature feature, List<Filter> filters, Map<String, Set> filterValues) {
-        for (Filter filter : filters) {
-            if (isNotEmpty(getFeaturePropertyValue(feature, filter.getName()))) {
-                filterValues.get(filter.getName()).add(getFeaturePropertyValue(feature, filter.getName()));
-            }
-        }
     }
 
     private boolean isEmpty(String s) {
@@ -85,5 +83,16 @@ public class PossibleValuesReader {
                 return "string".equals(((Filter)o).getType().toLowerCase());
             }
         };
+    }
+
+    private String[] getFilterNames(List<Filter> filters) {
+        String[] filterNames = new String[filters.size()];
+
+        int i = 0;
+        for (Filter filter : filters) {
+            filterNames[i++] = filter.getName();
+        }
+
+        return filterNames;
     }
 }
