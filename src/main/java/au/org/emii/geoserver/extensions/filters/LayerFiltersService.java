@@ -33,6 +33,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.util.List;
 
+import java.util.Set;
+
 import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader2;
 
 public class LayerFiltersService {
@@ -59,6 +61,8 @@ public class LayerFiltersService {
         String layer = request.getParameter("layer");
 		String propertyName = request.getParameter("propertyName");
 
+
+
         try {
             // respondWithDocument(response, getDocument(workspace, layer));
             respondWithDocument(response, getValuesDocument2(workspace, layer, propertyName));
@@ -75,7 +79,10 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
         FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
         List<Filter> filters = file.getFilters();
-        new PossibleValuesReader2().read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
+
+		PossibleValuesReader2 r = new PossibleValuesReader2(); 
+
+        Set s = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
 
         return new FiltersDocument().build(filters);
     }

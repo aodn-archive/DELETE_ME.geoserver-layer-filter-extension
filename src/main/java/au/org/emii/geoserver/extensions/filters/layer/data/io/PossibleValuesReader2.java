@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PossibleValuesReader2 {
 
-    public List<Filter> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName /*, List<Filter> filters */) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
+    public Set read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName ) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
 //        ContentDataStore dataStore = (ContentDataStore)dataStoreInfo.getDataStore(null);
  
 		JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
@@ -47,7 +47,12 @@ public class PossibleValuesReader2 {
 
         UniqueVisitor visitor = new UniqueVisitor( propertyName);
 
-   ///     contentFeatureSource.accepts(query, visitor, null);
+
+		// might be useful, 
+		// visitor.setMaxFeatures(int maxFeatures)
+
+
+   //   contentFeatureSource.accepts(query, visitor, null);
 
 		Connection conn = store.getDataSource().getConnection();
 
@@ -67,24 +72,24 @@ public class PossibleValuesReader2 {
 
         storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
 
+
+		Set result = visitor.getUnique(); 
+
+		Set result2 = new TreeSet( result );
+
+
         // store.getAggregateValue( visitor, schema, query, conn );
 
 /*
 		String myname = layerInfo.getName(); 
-
 		// try 1
         // String [] typeNames = store.getTypeNames();
 		// String typeName = typeNames[0];
         SimpleFeatureSource source = store.getFeatureSource( myname );
         FeatureType schema = source.getSchema();
-
         String name = "oxygen_sensor";
-
         Query query = new Query( null, null, new String[] { } );
-
-
 		Connection conn = store.getDataSource().getConnection();
-
         storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
 */
 
@@ -94,7 +99,7 @@ public class PossibleValuesReader2 {
         setFilterValues(dataStoreInfo, layerInfo, getValueFilters(filters), getFeatureSource(layerInfo));
         return filters;
 */
-		return null;
+		return result2;
     }
 
     private void setFilterValues(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, List<Filter> filters, FeatureSource featureSource) throws IOException {
