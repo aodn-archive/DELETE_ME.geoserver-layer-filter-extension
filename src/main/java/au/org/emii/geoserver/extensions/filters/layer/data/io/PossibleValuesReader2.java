@@ -102,6 +102,8 @@ public class PossibleValuesReader2 {
 		return result2;
     }
 
+/*
+
     private void setFilterValues(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, List<Filter> filters, FeatureSource featureSource) throws IOException {
         ContentDataStore dataStore = (ContentDataStore)dataStoreInfo.getDataStore(null);
         Query query = new Query(layerInfo.getName(), org.opengis.filter.Filter.INCLUDE, getFilterNames(filters));
@@ -174,4 +176,5 @@ public class PossibleValuesReader2 {
 
         return filterNames;
     }
+*/
 }
