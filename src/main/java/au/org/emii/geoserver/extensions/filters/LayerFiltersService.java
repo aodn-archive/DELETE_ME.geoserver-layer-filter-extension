@@ -70,12 +70,12 @@ public class LayerFiltersService {
 
 
     private Document getValuesDocument2(String workspace, String layer, String propertyName)
-        throws ParserConfigurationException, SAXException, IOException, NamingException
+        throws Exception //ParserConfigurationException, SAXException, IOException, NamingException
     {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
         FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
         List<Filter> filters = file.getFilters();
-        new PossibleValuesReader2().read(getDataStoreInfo(workspace, layer)/*, layerInfo, filters */);
+        new PossibleValuesReader2().read(getDataStoreInfo(workspace, layer), layerInfo/*, filters */);
 
         return new FiltersDocument().build(filters);
     }

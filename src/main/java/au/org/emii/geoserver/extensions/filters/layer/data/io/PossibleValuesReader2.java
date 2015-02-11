@@ -28,9 +28,44 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PossibleValuesReader2 {
 
-    public List<Filter> read(DataStoreInfo dataStoreInfo/*, LayerInfo layerInfo, List<Filter> filters */) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
-
+    public List<Filter> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo/*, List<Filter> filters */) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
+//        ContentDataStore dataStore = (ContentDataStore)dataStoreInfo.getDataStore(null);
+ 
 		JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
+
+
+/*		ContentFeatureSource contentFeatureSource = dataStore.getFeatureSource( "anmn_am_dm_map" );
+
+
+		String dbSchema = (String)dataStoreInfo.getConnectionParameters().get("schema"); 
+*/
+
+	
+        Query query = new Query( null, null, new String[] { } );
+
+
+        String name = "site_code";
+
+        UniqueVisitor visitor = new UniqueVisitor( name);
+
+   ///     contentFeatureSource.accepts(query, visitor, null);
+ 
+
+
+		Connection conn = store.getDataSource().getConnection();
+
+        SimpleFeatureSource source = store.getFeatureSource( "anmn_am_dm_map" );
+
+        FeatureType schema = source.getSchema();
+
+
+/*		            org.opengis.feature.FeatureVisitor.class,
+            org.opengis.feature.simple.SimpleFeatureType.class,
+            org.geotools.data.Query.class,
+            java.sql.Connection.class
+*/
+
+
 
 		Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod("getAggregateValue",
             org.opengis.feature.FeatureVisitor.class,
@@ -41,23 +76,29 @@ public class PossibleValuesReader2 {
         storeGetAggregateValueMethod.setAccessible(true);
 
 
-        String [] typeNames = store.getTypeNames();
-        String typeName = typeNames[0];
+        storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
 
-        SimpleFeatureSource source = store.getFeatureSource(typeName);
+        // store.getAggregateValue( visitor, schema, query, conn );
 
+
+/*
+		String myname = layerInfo.getName(); 
+
+		// try 1
+        // String [] typeNames = store.getTypeNames();
+		// String typeName = typeNames[0];
+        SimpleFeatureSource source = store.getFeatureSource( myname );
         FeatureType schema = source.getSchema();
 
-        String name = "title";
+        String name = "oxygen_sensor";
 
         Query query = new Query( null, null, new String[] { } );
 
-        UniqueVisitor visitor = new UniqueVisitor( name);
 
 		Connection conn = store.getDataSource().getConnection();
 
         storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
-
+*/
 
         //ContentDataStore store = (ContentDataStore)dataStoreInfo.getDataStore(null);
 		//Connection conn = store.getDataSource().getConnection(); 
