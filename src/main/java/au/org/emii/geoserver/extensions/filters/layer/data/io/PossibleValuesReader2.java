@@ -28,15 +28,13 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PossibleValuesReader2 {
 
-    public List<Filter> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo/*, List<Filter> filters */) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
+    public List<Filter> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName /*, List<Filter> filters */) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
 //        ContentDataStore dataStore = (ContentDataStore)dataStoreInfo.getDataStore(null);
  
 		JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
 
 
 /*		ContentFeatureSource contentFeatureSource = dataStore.getFeatureSource( "anmn_am_dm_map" );
-
-
 		String dbSchema = (String)dataStoreInfo.getConnectionParameters().get("schema"); 
 */
 
@@ -45,9 +43,9 @@ public class PossibleValuesReader2 {
         Query query = new Query( null, null, new String[] { } );
 
 
-        String name = "site_code";
+        // String name = "site_code";
 
-        UniqueVisitor visitor = new UniqueVisitor( name);
+        UniqueVisitor visitor = new UniqueVisitor( propertyName);
 
    ///     contentFeatureSource.accepts(query, visitor, null);
 

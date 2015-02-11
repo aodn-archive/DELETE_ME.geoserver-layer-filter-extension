@@ -75,7 +75,7 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
         FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
         List<Filter> filters = file.getFilters();
-        new PossibleValuesReader2().read(getDataStoreInfo(workspace, layer), layerInfo/*, filters */);
+        new PossibleValuesReader2().read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
 
         return new FiltersDocument().build(filters);
     }
