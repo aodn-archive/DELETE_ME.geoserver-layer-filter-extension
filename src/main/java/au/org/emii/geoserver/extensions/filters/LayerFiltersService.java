@@ -33,6 +33,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.util.List;
 
+import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader2;
+
 public class LayerFiltersService {
 
     private Catalog catalog;
@@ -55,14 +57,31 @@ public class LayerFiltersService {
     {
         String workspace = request.getParameter("workspace");
         String layer = request.getParameter("layer");
+		String propertyName = request.getParameter("propertyName");
 
         try {
-            respondWithDocument(response, getDocument(workspace, layer));
+            // respondWithDocument(response, getDocument(workspace, layer));
+            respondWithDocument(response, getValuesDocument2(workspace, layer, propertyName));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+
+    private Document getValuesDocument2(String workspace, String layer, String propertyName)
+        throws ParserConfigurationException, SAXException, IOException, NamingException
+    {
+        LayerInfo layerInfo = getLayerInfo(workspace, layer);
+        FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
+        List<Filter> filters = file.getFilters();
+        new PossibleValuesReader2().read(getDataStoreInfo(workspace, layer)/*, layerInfo, filters */);
+
+        return new FiltersDocument().build(filters);
+    }
+
+
+
 
     private void respondWithDocument(HttpServletResponse response, Document document) throws TransformerException, IOException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -71,6 +90,20 @@ public class LayerFiltersService {
         StreamResult result = new StreamResult(response.getOutputStream());
         transformer.transform(source, result);
     }
+
+
+    private Document getValuesDocument(String workspace, String layer, String propertyName)
+        throws ParserConfigurationException, SAXException, IOException, NamingException
+    {
+        LayerInfo layerInfo = getLayerInfo(workspace, layer);
+        FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
+        List<Filter> filters = file.getFilters();
+        new PossibleValuesReader().read(getDataStoreInfo(workspace, layer), layerInfo, filters);
+
+        return new FiltersDocument().build(filters);
+    }
+
+ 
 
     private Document getDocument(String workspace, String layer)
         throws ParserConfigurationException, SAXException, IOException, NamingException
