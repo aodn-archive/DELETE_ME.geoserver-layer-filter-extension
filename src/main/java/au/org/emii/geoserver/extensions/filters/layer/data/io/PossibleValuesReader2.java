@@ -40,6 +40,7 @@ public class PossibleValuesReader2 {
 		String dbSchema = (String)dataStoreInfo.getConnectionParameters().get("schema"); 
 */
 
+		String layerName = layerInfo.getName();
 	
         Query query = new Query( null, null, new String[] { } );
 
@@ -49,22 +50,12 @@ public class PossibleValuesReader2 {
         UniqueVisitor visitor = new UniqueVisitor( name);
 
    ///     contentFeatureSource.accepts(query, visitor, null);
- 
-
 
 		Connection conn = store.getDataSource().getConnection();
 
-        SimpleFeatureSource source = store.getFeatureSource( "anmn_am_dm_map" );
+        SimpleFeatureSource source = store.getFeatureSource( layerName /*"anmn_am_dm_map" */ );
 
         FeatureType schema = source.getSchema();
-
-
-/*		            org.opengis.feature.FeatureVisitor.class,
-            org.opengis.feature.simple.SimpleFeatureType.class,
-            org.geotools.data.Query.class,
-            java.sql.Connection.class
-*/
-
 
 
 		Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod("getAggregateValue",
@@ -79,7 +70,6 @@ public class PossibleValuesReader2 {
         storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
 
         // store.getAggregateValue( visitor, schema, query, conn );
-
 
 /*
 		String myname = layerInfo.getName(); 
