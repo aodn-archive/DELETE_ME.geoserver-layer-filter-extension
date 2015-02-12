@@ -1,3 +1,9 @@
+/*
+ * Copyright 2014 IMOS
+ *
+ * The AODN/IMOS Portal is distributed under the terms of the GNU General Public License
+ *
+ */
 
 package au.org.emii.geoserver.extensions.filters.layer.data.io;
 
@@ -28,39 +34,39 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PossibleValuesReader2 {
 
-    public Set<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName ) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
- 
-		JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
+    public Set<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
+        throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
+  {
 
-		String layerName = layerInfo.getName();
-	
+        JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
+
+        String layerName = layerInfo.getName();
+
         Query query = new Query( null, null, new String[] { } );
 
         UniqueVisitor visitor = new UniqueVisitor( propertyName);
 
-		Connection conn = store.getDataSource().getConnection();
+        Connection conn = store.getDataSource().getConnection();
 
         SimpleFeatureSource source = store.getFeatureSource( layerName );
 
         FeatureType schema = source.getSchema();
 
-		Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod("getAggregateValue",
+        Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod("getAggregateValue",
             org.opengis.feature.FeatureVisitor.class,
             org.opengis.feature.simple.SimpleFeatureType.class,
             org.geotools.data.Query.class,
             java.sql.Connection.class
-        );  
+        );
 
         storeGetAggregateValueMethod.setAccessible(true);
 
         storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
 
-		Set result = visitor.getUnique(); 
+        Set result = visitor.getUnique();
 
-		Set<String> result2 = new TreeSet<String>( result );
+        Set<String> result2 = new TreeSet<String>( result );
 
-		return result2;
+        return result2;
     }
-
-
 }
