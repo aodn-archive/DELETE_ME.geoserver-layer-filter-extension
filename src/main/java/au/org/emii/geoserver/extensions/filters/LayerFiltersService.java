@@ -11,7 +11,6 @@ import au.org.emii.geoserver.extensions.filters.layer.data.DataDirectory;
 import au.org.emii.geoserver.extensions.filters.layer.data.Filter;
 import au.org.emii.geoserver.extensions.filters.layer.data.FiltersDocument;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.FilterConfigurationFile;
-import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
@@ -129,17 +128,6 @@ public class LayerFiltersService {
     }
 
 
-    private Document getValuesDocument(String workspace, String layer, String propertyName)
-        throws ParserConfigurationException, SAXException, IOException, NamingException
-    {
-        LayerInfo layerInfo = getLayerInfo(workspace, layer);
-        FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
-        List<Filter> filters = file.getFilters();
-        new PossibleValuesReader().read(getDataStoreInfo(workspace, layer), layerInfo, filters);
-
-        return new FiltersDocument().build(filters);
-    }
-
  
 
     private Document getDocument(String workspace, String layer)
@@ -148,7 +136,7 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
         FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
         List<Filter> filters = file.getFilters();
-        new PossibleValuesReader().read(getDataStoreInfo(workspace, layer), layerInfo, filters);
+        //new PossibleValuesReader().read(getDataStoreInfo(workspace, layer), layerInfo, filters);
 
         return new FiltersDocument().build(filters);
     }
