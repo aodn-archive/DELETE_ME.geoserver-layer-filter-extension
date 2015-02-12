@@ -68,18 +68,32 @@ public class LayerFiltersService {
     {
         String workspace = request.getParameter("workspace");
         String layer = request.getParameter("layer");
-		String propertyName = request.getParameter("propertyName");
-
-
 
         try {
-            // respondWithDocument(response, getDocument(workspace, layer));
+            respondWithDocument(response, getDocument(workspace, layer));
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void uniqueValues(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
+    {
+        String workspace = request.getParameter("workspace");
+        String layer = request.getParameter("layer");
+		String propertyName = request.getParameter("propertyName");
+
+        try {
             respondWithDocument(response, getValuesDocument2(workspace, layer, propertyName));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
     private Document getValuesDocument2(String workspace, String layer, String propertyName)
