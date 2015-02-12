@@ -76,7 +76,6 @@ public class LayerFiltersService {
         }
     }
 
-
     public void uniqueValues(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
@@ -91,9 +90,6 @@ public class LayerFiltersService {
             throw new RuntimeException(e);
         }
     }
-
-
-
 
     private Document getValuesDocument2(String workspace, String layer, String propertyName)
         throws Exception //ParserConfigurationException, SAXException, IOException, NamingException
@@ -126,9 +122,6 @@ public class LayerFiltersService {
         StreamResult result = new StreamResult(response.getOutputStream());
         transformer.transform(source, result);
     }
-
-
- 
 
     private Document getDocument(String workspace, String layer)
         throws ParserConfigurationException, SAXException, IOException, NamingException
