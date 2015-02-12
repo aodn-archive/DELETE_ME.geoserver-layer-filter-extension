@@ -37,6 +37,15 @@ import java.util.Set;
 
 import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader2;
 
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+
 public class LayerFiltersService {
 
     private Catalog catalog;
@@ -82,9 +91,33 @@ public class LayerFiltersService {
 
 		PossibleValuesReader2 r = new PossibleValuesReader2(); 
 
-        Set s = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
+        Set<String> s = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
 
-        return new FiltersDocument().build(filters);
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+//        return docBuilder.newDocument();
+ 
+
+        Document document = docBuilder.newDocument();
+//getNewDocument();
+        Element filtersElement = appendChild(document, document, "filters");
+
+/*        for (Filter filter : filters) {
+            appendFilter(document, filtersElement, filter);
+        }
+*/
+        return document;
+
+        // return new FiltersDocument().build(filters);
+    }
+
+    private Element appendChild(Document document, Node parent, String name) {
+        Element element = document.createElement(name);
+        parent.appendChild(element);
+
+        return element;
     }
 
 

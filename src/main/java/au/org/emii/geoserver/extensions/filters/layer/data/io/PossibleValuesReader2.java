@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PossibleValuesReader2 {
 
-    public Set read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName ) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
+    public Set<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName ) throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException   {
 //        ContentDataStore dataStore = (ContentDataStore)dataStoreInfo.getDataStore(null);
  
 		JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
@@ -75,7 +75,7 @@ public class PossibleValuesReader2 {
 
 		Set result = visitor.getUnique(); 
 
-		Set result2 = new TreeSet( result );
+		Set<String> result2 = new TreeSet<String>( result );
 
 
         // store.getAggregateValue( visitor, schema, query, conn );
