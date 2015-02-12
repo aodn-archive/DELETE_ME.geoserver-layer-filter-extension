@@ -86,54 +86,24 @@ public class LayerFiltersService {
         throws Exception //ParserConfigurationException, SAXException, IOException, NamingException
     {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
-        FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
-        List<Filter> filters = file.getFilters();
 
 		PossibleValuesReader2 r = new PossibleValuesReader2(); 
-
-        Set<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
-
+        Set<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-//        return docBuilder.newDocument();
- 
-
         Document document = docBuilder.newDocument();
-//getNewDocument();
-        //Element filtersElement = appendChild(document, document, "filters");
-
-        Element filtersElement = document.createElement( "filters" );
+        Element filtersElement = document.createElement( "uniqueValues" );
         document.appendChild( filtersElement);
 
-//        appendChild(document, filtersElement, "filters");
-
-		for (String s : sss ) {
+		for (String s : sss) {
 	        Element element = document.createElement( "value" );
-
-			element.appendChild(document.createTextNode( s ));
-
+			element.appendChild(document.createTextNode(s));
 			filtersElement.appendChild(element);
         }
-
-/*        for (Filter filter : filters) {
-            appendFilter(document, filtersElement, filter);
-        }
-*/
         return document;
-
-        // return new FiltersDocument().build(filters);
     }
-
-    private Element appendChild(Document document, Node parent, String name) {
-        Element element = document.createElement(name);
-        parent.appendChild(element);
-
-        return element;
-    }
-
-
 
 
     private void respondWithDocument(HttpServletResponse response, Document document) throws TransformerException, IOException {
