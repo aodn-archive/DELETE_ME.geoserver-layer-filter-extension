@@ -91,7 +91,7 @@ public class LayerFiltersService {
 
 		PossibleValuesReader2 r = new PossibleValuesReader2(); 
 
-        Set<String> s = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
+        Set<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName/*, filters */);
 
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -102,7 +102,20 @@ public class LayerFiltersService {
 
         Document document = docBuilder.newDocument();
 //getNewDocument();
-        Element filtersElement = appendChild(document, document, "filters");
+        //Element filtersElement = appendChild(document, document, "filters");
+
+        Element filtersElement = document.createElement( "filters" );
+        document.appendChild( filtersElement);
+
+//        appendChild(document, filtersElement, "filters");
+
+		for (String s : sss ) {
+	        Element element = document.createElement( "value" );
+
+			element.appendChild(document.createTextNode( s ));
+
+			filtersElement.appendChild(element);
+        }
 
 /*        for (Filter filter : filters) {
             appendFilter(document, filtersElement, filter);
