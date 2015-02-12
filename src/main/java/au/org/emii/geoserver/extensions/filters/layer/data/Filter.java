@@ -21,7 +21,6 @@ public class Filter implements Serializable {
     private Boolean enabled;
     private Boolean visualised;
     private Boolean excludedFromDownload;
-    private Set<String> values;
 
     public Filter() {}
 
@@ -95,14 +94,6 @@ public class Filter implements Serializable {
 
     public void setExcludedFromDownload(Boolean excludedFromDownload) {
         this.excludedFromDownload = excludedFromDownload;
-    }
-
-    public Set<String> getValues() {
-        return values;
-    }
-
-    public void setValues(Set<String> values) {
-        this.values = values;
     }
 
     public Filter merge(Filter other) {
