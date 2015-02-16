@@ -42,7 +42,7 @@ public class PossibleValuesReader2 {
 
     public List<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
-  {
+    {
 
         JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
 
@@ -71,35 +71,35 @@ public class PossibleValuesReader2 {
 
         Set result = visitor.getUnique();
 
-		// order to underlying comparator
-		result = new TreeSet( result ); 	
+        // order to underlying comparator
+        result = new TreeSet( result );   
 
-		// all elts are guaranteed to be the same type
-		Class clazz = result.iterator().next().getClass();
-		//Class clazz = first.getClass(); 
+        // all elts are guaranteed to be the same type
+        Class clazz = result.iterator().next().getClass();
 
-		// list stuff should probably be done near the document formatter, since it's an output type.
+        // list stuff should probably be done near the document formatter, since it's an output type.
 
-		List<String> result2 = new ArrayList<String>();
+        List<String> result2 = new ArrayList<String>();
 
-		if (clazz == Integer.class) {
-			for(Object value : result) {
-				result2.add(Integer.toString((Integer)value)); 
-			}
-		} 
-		else if (clazz == Long.class) {
-			for(Object value : result) {
-				result2.add(Long.toString((Long)value)); 
-			}
-		} 
-		else if (clazz == String.class) {
-			for(Object value : result) {
-				result2.add((String)value); 
-			}
-		}
+        if (clazz == Integer.class) {
+            for(Object value : result) {
+                result2.add(Integer.toString((Integer)value)); 
+            }
+        } 
+        else if (clazz == Long.class) {
+            for(Object value : result) {
+                result2.add(Long.toString((Long)value)); 
+            }
+        } 
+        else if (clazz == String.class) {
+            for(Object value : result) {
+                result2.add((String)value); 
+            }
+        }
+        else {
+           throw new RuntimeException("Unrecognized values type" );  
+        }
 
-
-        // Set<String> result2 = new TreeSet<String>( result );
 
         return result2;
     }
