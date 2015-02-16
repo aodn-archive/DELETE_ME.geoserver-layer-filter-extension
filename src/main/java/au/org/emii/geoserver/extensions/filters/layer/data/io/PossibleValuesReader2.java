@@ -23,8 +23,8 @@ import org.opengis.feature.Feature;
 import java.io.IOException;
 import java.util.*;
 
-import java.util.ArrayList; 
-import java.util.List; 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.geotools.jdbc.JDBCDataStore;
 import org.opengis.feature.type.FeatureType;
@@ -52,16 +52,11 @@ public class PossibleValuesReader2 {
 
         JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
 
-        String layerName = layerInfo.getName();
-
         Query query = new Query( null, null, new String[] { } );
 
         UniqueVisitor visitor = new UniqueVisitor( propertyName);
 
-
-        SimpleFeatureSource source = store.getFeatureSource( layerName );
-
-        FeatureType schema = source.getSchema();
+        FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
 
         Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod("getAggregateValue",
             org.opengis.feature.FeatureVisitor.class,
@@ -72,71 +67,61 @@ public class PossibleValuesReader2 {
 
         storeGetAggregateValueMethod.setAccessible(true);
 
-
         Connection conn = store.getDataSource().getConnection();
-		try { 
-			storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
-		}
-		finally {
-			conn.close();
-/*
-			store.getDataSource(); 
-			// store.getState(); 
-			DataSource ds = store.getDataSource(); //.releaseConnection(conn );//, store.getState() );
-*/				
-			// getDataStore().releaseConnection(cx, getState());
-		}
-
-        Set result = visitor.getUnique();
+        try {
+            storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn);
+        }
+        finally {
+            conn.close();
+        }
 
         // order using underlying Object type comparator
-        result = new TreeSet( result );   
+        Set result = new TreeSet(visitor.getUnique());
 
         // all elts are guaranteed to be the same type
         Class clazz = result.iterator().next().getClass();
 
         // list stuff should probably be done near the document formatter, since it's an output type.
-
         List<String> result2 = new ArrayList<String>();
 
         if (clazz.equals(Boolean.class)) {
             for(Object value : result) {
-                result2.add(Boolean.toString((Boolean)value)); 
+                result2.add(Boolean.toString((Boolean)value));
             }
-        } 
+        }
         else if (clazz.equals(Integer.class)) {
             for(Object value : result) {
-                result2.add(Integer.toString((Integer)value)); 
+                result2.add(Integer.toString((Integer)value));
             }
-        } 
+        }
         else if (clazz.equals(Long.class)) {
             for(Object value : result) {
-                result2.add(Long.toString((Long)value)); 
+                result2.add(Long.toString((Long)value));
             }
-        } 
+        }
         else if (clazz.equals(Float.class)) {
             for(Object value : result) {
-                result2.add(Float.toString((Float)value)); 
+                result2.add(Float.toString((Float)value));
             }
-        } 
+        }
         else if (clazz.equals(Double.class)) {
             for(Object value : result) {
-                result2.add(Double.toString((Double)value)); 
+                result2.add(Double.toString((Double)value));
             }
-        } 
+        }
         else if (clazz.equals(String.class)) {
             for(Object value : result) {
-                result2.add((String)value); 
+                result2.add((String)value);
             }
         }
         else if (clazz.equals(java.sql.Date.class)) {
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             for(Object value : result) {
-                result2.add(df.format((Date)value )); 
+                result2.add(df.format((Date)value ));
             }
         }
         else {
-           throw new RuntimeException("Unrecognized type" );  
+           throw new RuntimeException("Unrecognized type" );
         }
 
         return result2;
