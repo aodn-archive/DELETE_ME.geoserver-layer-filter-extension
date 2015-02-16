@@ -37,6 +37,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.lang.reflect.Type;
 
+import java.text.SimpleDateFormat;
+
 public class PossibleValuesReader2 {
 
 
@@ -81,25 +83,45 @@ public class PossibleValuesReader2 {
 
         List<String> result2 = new ArrayList<String>();
 
-        if (clazz == Integer.class) {
+        if (clazz.equals(Boolean.class)) {
+            for(Object value : result) {
+                result2.add(Boolean.toString((Boolean)value)); 
+            }
+        } 
+        else if (clazz.equals(Integer.class)) {
             for(Object value : result) {
                 result2.add(Integer.toString((Integer)value)); 
             }
         } 
-        else if (clazz == Long.class) {
+        else if (clazz.equals(Long.class)) {
             for(Object value : result) {
                 result2.add(Long.toString((Long)value)); 
             }
         } 
-        else if (clazz == String.class) {
+        else if (clazz.equals(Float.class)) {
+            for(Object value : result) {
+                result2.add(Float.toString((Float)value)); 
+            }
+        } 
+        else if (clazz.equals(Double.class)) {
+            for(Object value : result) {
+                result2.add(Double.toString((Double)value)); 
+            }
+        } 
+        else if (clazz.equals(String.class)) {
             for(Object value : result) {
                 result2.add((String)value); 
             }
         }
-        else {
-           throw new RuntimeException("Unrecognized values type" );  
+        else if (clazz.equals(java.sql.Date.class)) {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            for(Object value : result) {
+                result2.add(df.format((Date)value )); 
+            }
         }
-
+        else {
+           throw new RuntimeException("Unrecognized type" );  
+        }
 
         return result2;
     }
