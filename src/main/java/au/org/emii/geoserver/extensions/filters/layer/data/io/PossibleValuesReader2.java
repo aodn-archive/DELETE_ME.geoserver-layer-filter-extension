@@ -39,6 +39,10 @@ import java.lang.reflect.Type;
 
 import java.text.SimpleDateFormat;
 
+
+import javax.sql.DataSource;
+
+
 public class PossibleValuesReader2 {
 
 
@@ -54,7 +58,6 @@ public class PossibleValuesReader2 {
 
         UniqueVisitor visitor = new UniqueVisitor( propertyName);
 
-        Connection conn = store.getDataSource().getConnection();
 
         SimpleFeatureSource source = store.getFeatureSource( layerName );
 
@@ -69,11 +72,24 @@ public class PossibleValuesReader2 {
 
         storeGetAggregateValueMethod.setAccessible(true);
 
-        storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
+
+        Connection conn = store.getDataSource().getConnection();
+		try { 
+			storeGetAggregateValueMethod.invoke(store, visitor, schema, query, conn );
+		}
+		finally {
+			conn.close();
+/*
+			store.getDataSource(); 
+			// store.getState(); 
+			DataSource ds = store.getDataSource(); //.releaseConnection(conn );//, store.getState() );
+*/				
+			// getDataStore().releaseConnection(cx, getState());
+		}
 
         Set result = visitor.getUnique();
 
-        // order to underlying comparator
+        // order using underlying Object type comparator
         result = new TreeSet( result );   
 
         // all elts are guaranteed to be the same type
