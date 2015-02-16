@@ -39,18 +39,6 @@ import java.lang.reflect.Type;
 
 public class PossibleValuesReader2 {
 
-	private static final String TYPE_NAME_PREFIX = "class ";
- 
-	public static String getClassName(Type type) {
-		if (type==null) {
-			return "";
-		}
-		String className = type.toString();
-		if (className.startsWith(TYPE_NAME_PREFIX)) {
-			className = className.substring(TYPE_NAME_PREFIX.length());
-		}
-		return className;
-	}
 
     public List<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
@@ -83,6 +71,7 @@ public class PossibleValuesReader2 {
 
         Set result = visitor.getUnique();
 
+		// order to underlying comparator
 		result = new TreeSet( result ); 	
 
 		// all elts are guaranteed to be the same type
