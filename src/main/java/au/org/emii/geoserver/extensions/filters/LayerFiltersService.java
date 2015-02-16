@@ -97,7 +97,7 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
 		PossibleValuesReader2 r = new PossibleValuesReader2(); 
-        Set<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
+        List<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();

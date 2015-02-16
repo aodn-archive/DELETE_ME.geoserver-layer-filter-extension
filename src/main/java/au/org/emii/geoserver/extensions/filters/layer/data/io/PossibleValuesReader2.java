@@ -23,6 +23,9 @@ import org.opengis.feature.Feature;
 import java.io.IOException;
 import java.util.*;
 
+import java.util.ArrayList; 
+import java.util.List; 
+
 import org.geotools.jdbc.JDBCDataStore;
 import org.opengis.feature.type.FeatureType;
 import java.lang.reflect.Method;
@@ -49,7 +52,7 @@ public class PossibleValuesReader2 {
 		return className;
 	}
 
-    public Set<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
+    public List<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
   {
 
@@ -80,62 +83,34 @@ public class PossibleValuesReader2 {
 
         Set result = visitor.getUnique();
 
-        // we need to map to string form here, which means that we need the actual type ...
-        for( Object item : result ) 
-        {
-			// String name1 = item.class.name ; 
-			//String name2 = item.getClass().getSimpleName(); 
+		result = new TreeSet( result ); 	
 
-			String name2 = item.getClass().toString(); 
-	
-			//*/String x = String.class; 
+		// all elts are guaranteed to be the same type
+		Class clazz = result.iterator().next().getClass();
+		//Class clazz = first.getClass(); 
 
+		// list stuff should probably be done near the document formatter, since it's an output type.
 
-			Object value = item; 
-		
-			if (value.getClass() == Integer.class) {
-				System.out.println("This is an Integer");
-			} 
-			else if (value.getClass() == String.class) {
-				System.out.println("This is a String");
+		List<String> result2 = new ArrayList<String>();
+
+		if (clazz == Integer.class) {
+			for(Object value : result) {
+				result2.add(Integer.toString((Integer)value)); 
 			}
-			else if (value.getClass() == Float.class) {
-				System.out.println("This is a Float");
-			}	
-
-/*
-			if (item instanceof String.class) {
-				System.out.println( "it's a string " );
+		} 
+		else if (clazz == Long.class) {
+			for(Object value : result) {
+				result2.add(Long.toString((Long)value)); 
 			}
-			if (item instanceof Long.class) {
-				System.out.println( "it's a long" );
+		} 
+		else if (clazz == String.class) {
+			for(Object value : result) {
+				result2.add((String)value); 
 			}
-*/
+		}
 
 
-
-			/* 
-			//String name2 = item.getClass().getName(); 
-			no string switch support...
-			switch( name ){
-				 case "A":	
-					System.out.println( "hi" );
-			};
-			// CLAZZ z = CLAZZ.valueOf( item.getClass().getSimpleName());
-			*/
-
-			if (name2.equals(String.class)) {
-				System.out.println( "hi" );
-			} 
-			if (name2.equals(Long.class)) {
-				System.out.println( "hi" );
-			} 
-
-
-
-        } 
-
-        Set<String> result2 = new TreeSet<String>( result );
+        // Set<String> result2 = new TreeSet<String>( result );
 
         return result2;
     }
