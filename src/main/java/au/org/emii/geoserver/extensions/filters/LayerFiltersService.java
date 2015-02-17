@@ -71,7 +71,7 @@ public class LayerFiltersService {
     {
         String workspace = request.getParameter("workspace");
         String layer = request.getParameter("layer");
-		String propertyName = request.getParameter("propertyName");
+        String propertyName = request.getParameter("propertyName");
 
         try {
             respondWithDocument(response, getUniqueValuesDocument(workspace, layer, propertyName));
@@ -86,7 +86,7 @@ public class LayerFiltersService {
     {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
-		PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
+        PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
         Set values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         return new ValuesDocument().build(values);

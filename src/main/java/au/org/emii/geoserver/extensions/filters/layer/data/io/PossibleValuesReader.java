@@ -15,14 +15,13 @@ import org.geotools.jdbc.JDBCDataStore;
 import org.opengis.feature.type.FeatureType;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.TreeSet;
-
 import java.lang.reflect.Method;
 import java.lang.IllegalAccessException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class PossibleValuesReader {
 
@@ -35,7 +34,7 @@ public class PossibleValuesReader {
         FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
 
         Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod(
-			"getAggregateValue",
+            "getAggregateValue",
             org.opengis.feature.FeatureVisitor.class,
             org.opengis.feature.simple.SimpleFeatureType.class,
             org.geotools.data.Query.class,
