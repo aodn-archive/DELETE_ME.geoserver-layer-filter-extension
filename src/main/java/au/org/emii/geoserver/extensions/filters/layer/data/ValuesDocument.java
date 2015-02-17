@@ -19,33 +19,26 @@ import java.util.List;
 public class ValuesDocument {
 
     public Document build(List<String> values) throws Exception {
-
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-        Document document = docBuilder.newDocument();
-        Element filtersElement = document.createElement( "uniqueValues" );
-        document.appendChild( filtersElement);
+        Document document = getNewDocument();
+        Element valuesElement = document.createElement( "uniqueValues" );
+        document.appendChild( valuesElement);
 
 		for (String value : values) {
 	        Element element = document.createElement( "value" );
 			element.appendChild(document.createTextNode(value));
-			filtersElement.appendChild(element);
+			valuesElement.appendChild(element);
         }
         return document;
-
-/*
-        Document document = getNewDocument();
-        Element filtersElement = appendChild(document, document, "filters");
-
-        for (Filter filter : filters) {
-            appendFilter(document, filtersElement, filter);
-        }
-
-        return document;
-*/
     }
 
+    private Document getNewDocument() throws ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        return docBuilder.newDocument();
+    }
+
+ 
 /*
     private Document getNewDocument() throws ParserConfigurationException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
