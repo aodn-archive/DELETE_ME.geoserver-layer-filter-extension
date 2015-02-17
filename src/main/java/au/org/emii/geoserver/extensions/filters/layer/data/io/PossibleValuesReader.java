@@ -37,20 +37,14 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.lang.reflect.Type;
 
-
 public class PossibleValuesReader {
-
 
     public Set read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
     {
-
         JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
-
         Query query = new Query(null, null, new String[] { });
-
         UniqueVisitor visitor = new UniqueVisitor(propertyName);
-
         FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
 
         Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod(
@@ -60,7 +54,6 @@ public class PossibleValuesReader {
             org.geotools.data.Query.class,
             java.sql.Connection.class
         );
-
         storeGetAggregateValueMethod.setAccessible(true);
 
         Connection conn = store.getDataSource().getConnection();
@@ -71,59 +64,7 @@ public class PossibleValuesReader {
             conn.close();
         }
 
-        // order using underlying Object type comparator
+        // ordered by underlying Object type comparator
         return new TreeSet(visitor.getUnique());
-
-/*
-        Set result = new TreeSet(visitor.getUnique());
-
-        // all elts are guaranteed to be the same type
-        Class clazz = result.iterator().next().getClass();
-
-        // list stuff should probably be done near the document formatter, since it's an output type.
-        List<String> result2 = new ArrayList<String>();
-
-        if (clazz.equals(Boolean.class)) {
-            for(Object value : result) {
-                result2.add(Boolean.toString((Boolean)value));
-            }
-        }
-        else if (clazz.equals(Integer.class)) {
-            for(Object value : result) {
-                result2.add(Integer.toString((Integer)value));
-            }
-        }
-        else if (clazz.equals(Long.class)) {
-            for(Object value : result) {
-                result2.add(Long.toString((Long)value));
-            }
-        }
-        else if (clazz.equals(Float.class)) {
-            for(Object value : result) {
-                result2.add(Float.toString((Float)value));
-            }
-        }
-        else if (clazz.equals(Double.class)) {
-            for(Object value : result) {
-                result2.add(Double.toString((Double)value));
-            }
-        }
-        else if (clazz.equals(String.class)) {
-            for(Object value : result) {
-                result2.add((String)value);
-            }
-        }
-        else if (clazz.equals(java.sql.Date.class)) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            for(Object value : result) {
-                result2.add(df.format((Date)value ));
-            }
-        }
-        else {
-           throw new RuntimeException("Unrecognized type" );
-        }
-
-        return result2;
-*/
     }
 }

@@ -98,7 +98,6 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
 		PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
-        //List<String> values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
         Set values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         return new ValuesDocument().build(values);
@@ -114,7 +113,6 @@ public class LayerFiltersService {
 
         return new FiltersDocument().build(filters);
     }
-
 
     private void respondWithDocument(HttpServletResponse response, Document document) throws TransformerException, IOException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

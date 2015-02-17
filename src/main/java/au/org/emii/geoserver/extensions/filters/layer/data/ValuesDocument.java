@@ -26,11 +26,11 @@ public class ValuesDocument {
 
     public Document build(Set values) throws Exception {
         Document document = getNewDocument();
-        Element valuesElement = document.createElement( "uniqueValues" );
+        Element valuesElement = document.createElement("uniqueValues");
         document.appendChild(valuesElement);
 
         for (String value : encodeValues(values)) {
-              Element element = document.createElement( "value" );
+              Element element = document.createElement("value");
               element.appendChild(document.createTextNode(value));
               valuesElement.appendChild(element);
         }
