@@ -10,6 +10,7 @@ package au.org.emii.geoserver.extensions.filters;
 import au.org.emii.geoserver.extensions.filters.layer.data.DataDirectory;
 import au.org.emii.geoserver.extensions.filters.layer.data.Filter;
 import au.org.emii.geoserver.extensions.filters.layer.data.FiltersDocument;
+import au.org.emii.geoserver.extensions.filters.layer.data.ValuesDocument;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.FilterConfigurationFile;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
@@ -99,19 +100,8 @@ public class LayerFiltersService {
 		PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
         List<String> values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        return new ValuesDocument().build(values);
 
-        Document document = docBuilder.newDocument();
-        Element filtersElement = document.createElement( "uniqueValues" );
-        document.appendChild( filtersElement);
-
-		for (String value : values) {
-	        Element element = document.createElement( "value" );
-			element.appendChild(document.createTextNode(value));
-			filtersElement.appendChild(element);
-        }
-        return document;
     }
 
     private Document getEnabledFiltersDocument(String workspace, String layer)
