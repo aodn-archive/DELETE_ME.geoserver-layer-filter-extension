@@ -96,8 +96,8 @@ public class LayerFiltersService {
     {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
-		PossibleValuesReader r = new PossibleValuesReader();
-        List<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
+		PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
+        List<String> values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -106,9 +106,9 @@ public class LayerFiltersService {
         Element filtersElement = document.createElement( "uniqueValues" );
         document.appendChild( filtersElement);
 
-		for (String s : sss) {
+		for (String value : values) {
 	        Element element = document.createElement( "value" );
-			element.appendChild(document.createTextNode(s));
+			element.appendChild(document.createTextNode(value));
 			filtersElement.appendChild(element);
         }
         return document;
