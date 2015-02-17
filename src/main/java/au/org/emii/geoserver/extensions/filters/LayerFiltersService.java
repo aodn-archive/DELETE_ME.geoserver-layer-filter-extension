@@ -10,9 +10,10 @@ package au.org.emii.geoserver.extensions.filters;
 import au.org.emii.geoserver.extensions.filters.layer.data.DataDirectory;
 import au.org.emii.geoserver.extensions.filters.layer.data.Filter;
 import au.org.emii.geoserver.extensions.filters.layer.data.FiltersDocument;
-import au.org.emii.geoserver.extensions.filters.layer.data.ValuesDocument;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.FilterConfigurationFile;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader;
+import au.org.emii.geoserver.extensions.filters.layer.data.ValuesDocument;
+
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
