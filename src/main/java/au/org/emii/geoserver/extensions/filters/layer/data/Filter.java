@@ -10,8 +10,6 @@ package au.org.emii.geoserver.extensions.filters.layer.data;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
 
 public class Filter implements Serializable {
 

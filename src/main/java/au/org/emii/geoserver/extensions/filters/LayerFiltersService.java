@@ -12,6 +12,7 @@ import au.org.emii.geoserver.extensions.filters.layer.data.Filter;
 import au.org.emii.geoserver.extensions.filters.layer.data.FiltersDocument;
 import au.org.emii.geoserver.extensions.filters.layer.data.ValuesDocument;
 import au.org.emii.geoserver.extensions.filters.layer.data.io.FilterConfigurationFile;
+import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
@@ -32,19 +33,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.util.List;
-
 import java.util.Set;
-
-import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader;
-
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 
 public class LayerFiltersService {
 

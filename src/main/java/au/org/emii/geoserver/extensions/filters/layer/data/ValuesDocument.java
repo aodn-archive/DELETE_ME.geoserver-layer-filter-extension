@@ -9,18 +9,17 @@ package au.org.emii.geoserver.extensions.filters.layer.data;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Date;
 
-import java.text.SimpleDateFormat;
-import javax.sql.DataSource;
-import java.util.*;
 
 public class ValuesDocument {
 
