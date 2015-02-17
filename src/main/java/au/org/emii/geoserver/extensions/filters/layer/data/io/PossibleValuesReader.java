@@ -43,7 +43,7 @@ import java.text.SimpleDateFormat;
 import javax.sql.DataSource;
 
 
-public class PossibleValuesReader2 {
+public class PossibleValuesReader {
 
 
     public List<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
