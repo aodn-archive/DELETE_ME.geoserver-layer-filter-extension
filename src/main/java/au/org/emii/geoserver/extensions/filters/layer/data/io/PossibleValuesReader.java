@@ -33,7 +33,6 @@ public class PossibleValuesReader {
     public Set read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName)
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
     {
-
         JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
         FeatureTypeInfo info = (FeatureTypeInfo)layerInfo.getResource();
 
@@ -41,25 +40,17 @@ public class PossibleValuesReader {
 
         if( info.getMetadata() != null && info.getMetadata().containsKey(FeatureTypeInfo.JDBC_VIRTUAL_TABLE)) {
             VirtualTable vt = (VirtualTable) info.getMetadata().get(FeatureTypeInfo.JDBC_VIRTUAL_TABLE);
-/*            JDBCDataStore jstore = (JDBCDataStore) dataStore;
-            if(!jstore.getVirtualTables().containsValue(vt)) {
-                 jstore.addVirtualTable(vt);
-            }
-*/
             if(!store.getVirtualTables().containsValue(vt)) {
                  store.addVirtualTable(vt);
             }
-
-
             schema = store.getSchema(vt.getName());
- 
-
+        }
+        else {
+            schema = store.getSchema(layerInfo.getName());
         }
 
         Query query = new Query(null, null, new String[] { });
         UniqueVisitor visitor = new UniqueVisitor(propertyName);
-//        FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
-
 
         Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod(
             "getAggregateValue",
@@ -78,7 +69,7 @@ public class PossibleValuesReader {
             conn.close();
         }
 
-        // ordered by underlying Object type comparator
+        // ordered by comparator for type
         return new TreeSet(visitor.getUnique());
     }
 }
