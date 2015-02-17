@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class ValuesDocument {
 
     public Document build(Set values) throws Exception {
