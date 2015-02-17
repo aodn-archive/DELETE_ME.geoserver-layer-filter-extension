@@ -81,18 +81,6 @@ public class LayerFiltersService {
         }
     }
 
-    private Document getUniqueValuesDocument(String workspace, String layer, String propertyName)
-        throws Exception
-    {
-        LayerInfo layerInfo = getLayerInfo(workspace, layer);
-
-        PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
-        Set values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
-
-        return new ValuesDocument().build(values);
-
-    }
-
     private Document getEnabledFiltersDocument(String workspace, String layer)
         throws ParserConfigurationException, SAXException, IOException, NamingException
     {
@@ -101,6 +89,16 @@ public class LayerFiltersService {
         List<Filter> filters = file.getFilters();
 
         return new FiltersDocument().build(filters);
+    }
+
+    private Document getUniqueValuesDocument(String workspace, String layer, String propertyName)
+        throws Exception
+    {
+        LayerInfo layerInfo = getLayerInfo(workspace, layer);
+        PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
+        Set values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
+
+        return new ValuesDocument().build(values);
     }
 
     private void respondWithDocument(HttpServletResponse response, Document document) throws TransformerException, IOException {
