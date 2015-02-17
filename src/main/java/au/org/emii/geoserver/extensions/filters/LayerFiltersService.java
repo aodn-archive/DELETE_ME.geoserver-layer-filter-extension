@@ -34,7 +34,7 @@ import java.util.List;
 
 import java.util.Set;
 
-import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader2;
+import au.org.emii.geoserver.extensions.filters.layer.data.io.PossibleValuesReader;
 
 
 import org.w3c.dom.Document;
@@ -96,7 +96,7 @@ public class LayerFiltersService {
     {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
-		PossibleValuesReader2 r = new PossibleValuesReader2(); 
+		PossibleValuesReader r = new PossibleValuesReader();
         List<String> sss = r.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
