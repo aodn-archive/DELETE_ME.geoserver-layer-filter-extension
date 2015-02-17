@@ -98,7 +98,8 @@ public class LayerFiltersService {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
 		PossibleValuesReader possibleValuesReader = new PossibleValuesReader();
-        List<String> values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
+        //List<String> values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
+        Set values = possibleValuesReader.read(getDataStoreInfo(workspace, layer), layerInfo, propertyName);
 
         return new ValuesDocument().build(values);
 

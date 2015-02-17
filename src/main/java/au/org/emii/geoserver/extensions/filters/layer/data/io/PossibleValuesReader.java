@@ -37,28 +37,24 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.lang.reflect.Type;
 
-import java.text.SimpleDateFormat;
-
-
-import javax.sql.DataSource;
-
 
 public class PossibleValuesReader {
 
 
-    public List<String> read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
+    public Set read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName )
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
     {
 
         JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
 
-        Query query = new Query( null, null, new String[] { } );
+        Query query = new Query(null, null, new String[] { });
 
-        UniqueVisitor visitor = new UniqueVisitor( propertyName);
+        UniqueVisitor visitor = new UniqueVisitor(propertyName);
 
         FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
 
-        Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod("getAggregateValue",
+        Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod(
+			"getAggregateValue",
             org.opengis.feature.FeatureVisitor.class,
             org.opengis.feature.simple.SimpleFeatureType.class,
             org.geotools.data.Query.class,
@@ -76,6 +72,9 @@ public class PossibleValuesReader {
         }
 
         // order using underlying Object type comparator
+        return new TreeSet(visitor.getUnique());
+
+/*
         Set result = new TreeSet(visitor.getUnique());
 
         // all elts are guaranteed to be the same type
@@ -125,5 +124,6 @@ public class PossibleValuesReader {
         }
 
         return result2;
+*/
     }
 }
