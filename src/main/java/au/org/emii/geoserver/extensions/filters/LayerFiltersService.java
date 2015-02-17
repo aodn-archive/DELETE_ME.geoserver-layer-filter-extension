@@ -69,7 +69,7 @@ public class LayerFiltersService {
         String layer = request.getParameter("layer");
 
         try {
-            respondWithDocument(response, getDocument(workspace, layer));
+            respondWithDocument(response, getEnabledFiltersDocument(workspace, layer));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -84,15 +84,15 @@ public class LayerFiltersService {
 		String propertyName = request.getParameter("propertyName");
 
         try {
-            respondWithDocument(response, getValuesDocument2(workspace, layer, propertyName));
+            respondWithDocument(response, getUniqueValuesDocument(workspace, layer, propertyName));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Document getValuesDocument2(String workspace, String layer, String propertyName)
-        throws Exception //ParserConfigurationException, SAXException, IOException, NamingException
+    private Document getUniqueValuesDocument(String workspace, String layer, String propertyName)
+        throws Exception
     {
         LayerInfo layerInfo = getLayerInfo(workspace, layer);
 
@@ -114,6 +114,16 @@ public class LayerFiltersService {
         return document;
     }
 
+    private Document getEnabledFiltersDocument(String workspace, String layer)
+        throws ParserConfigurationException, SAXException, IOException, NamingException
+    {
+        LayerInfo layerInfo = getLayerInfo(workspace, layer);
+        FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
+        List<Filter> filters = file.getFilters();
+
+        return new FiltersDocument().build(filters);
+    }
+
 
     private void respondWithDocument(HttpServletResponse response, Document document) throws TransformerException, IOException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -121,17 +131,6 @@ public class LayerFiltersService {
         DOMSource source = new DOMSource(document);
         StreamResult result = new StreamResult(response.getOutputStream());
         transformer.transform(source, result);
-    }
-
-    private Document getDocument(String workspace, String layer)
-        throws ParserConfigurationException, SAXException, IOException, NamingException
-    {
-        LayerInfo layerInfo = getLayerInfo(workspace, layer);
-        FilterConfigurationFile file = new FilterConfigurationFile(getLayerDataDirectoryPath(layerInfo));
-        List<Filter> filters = file.getFilters();
-        //new PossibleValuesReader().read(getDataStoreInfo(workspace, layer), layerInfo, filters);
-
-        return new FiltersDocument().build(filters);
     }
 
     private LayerInfo getLayerInfo(String workspace, String layer) {
