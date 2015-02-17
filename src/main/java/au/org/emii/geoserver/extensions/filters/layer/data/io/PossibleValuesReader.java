@@ -12,7 +12,11 @@ import org.geoserver.catalog.LayerInfo;
 import org.geotools.data.Query;
 import org.geotools.feature.visitor.UniqueVisitor;
 import org.geotools.jdbc.JDBCDataStore;
+import org.geotools.jdbc.VirtualTable;
+
 import org.opengis.feature.type.FeatureType;
+
+import org.geoserver.catalog.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -23,15 +27,39 @@ import java.sql.SQLException;
 import java.util.Set;
 import java.util.TreeSet;
 
+
 public class PossibleValuesReader {
 
     public Set read(DataStoreInfo dataStoreInfo, LayerInfo layerInfo, String propertyName)
         throws IOException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException
     {
+
         JDBCDataStore store = (JDBCDataStore)dataStoreInfo.getDataStore(null);
+        FeatureTypeInfo info = (FeatureTypeInfo)layerInfo.getResource();
+
+        FeatureType schema = null ;
+
+        if( info.getMetadata() != null && info.getMetadata().containsKey(FeatureTypeInfo.JDBC_VIRTUAL_TABLE)) {
+            VirtualTable vt = (VirtualTable) info.getMetadata().get(FeatureTypeInfo.JDBC_VIRTUAL_TABLE);
+/*            JDBCDataStore jstore = (JDBCDataStore) dataStore;
+            if(!jstore.getVirtualTables().containsValue(vt)) {
+                 jstore.addVirtualTable(vt);
+            }
+*/
+            if(!store.getVirtualTables().containsValue(vt)) {
+                 store.addVirtualTable(vt);
+            }
+
+
+            schema = store.getSchema(vt.getName());
+ 
+
+        }
+
         Query query = new Query(null, null, new String[] { });
         UniqueVisitor visitor = new UniqueVisitor(propertyName);
-        FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
+//        FeatureType schema = store.getFeatureSource(layerInfo.getName()).getSchema();
+
 
         Method storeGetAggregateValueMethod = store.getClass().getDeclaredMethod(
             "getAggregateValue",
