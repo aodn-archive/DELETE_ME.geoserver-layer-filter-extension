@@ -10,9 +10,9 @@
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>org.geoserver</groupId>
-        <artifactId>geoserver</artifactId>
-        <version>2.6.0</version>
+      <groupId>org.geoserver</groupId>
+      <artifactId>extension</artifactId>
+      <version>2.6.1</version>
     </parent>
 
     <repositories>
