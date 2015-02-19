@@ -9,6 +9,8 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
+    <name>GeoServer Layer Filter Extension (jar)</name>
+
     <parent>
       <groupId>org.geoserver</groupId>
       <artifactId>extension</artifactId>
