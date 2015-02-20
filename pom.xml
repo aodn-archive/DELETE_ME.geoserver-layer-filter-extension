@@ -12,9 +12,9 @@
     <name>GeoServer Layer Filter Extension (jar)</name>
 
     <parent>
-      <groupId>org.geoserver</groupId>
-      <artifactId>extension</artifactId>
-      <version>2.6.2</version>
+        <groupId>org.geoserver</groupId>
+        <artifactId>extension</artifactId>
+        <version>2.6.2</version>
     </parent>
 
     <repositories>
