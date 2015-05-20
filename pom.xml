@@ -22,7 +22,7 @@
         <groupId>au.org.emii</groupId>
         <artifactId>geoserver</artifactId>
         <version>1.0.0</version>
-        <!--relativePath>../../../pom.xml</relativePath-->
+        <!-- relativePath>../geoserver/c</relativePath -->
     </parent>
 
 
@@ -37,6 +37,8 @@
 
     <dependencies>
         <dependency>
+            <!-- groupId>au.org.emii</groupId -->
+            <!-- artifactId>geoserver</artifactId -->
             <groupId>org.geoserver.web</groupId>
             <artifactId>gs-web-core</artifactId>
             <version>${geoserver.version}</version>
@@ -44,19 +46,20 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
+        <!-- dependency>
             <groupId>org.geoserver</groupId>
             <artifactId>gs-wfs</artifactId>
             <version>${geoserver.version}</version>
 
             <scope>provided</scope>
-        </dependency>
+        </dependency -->
 
-        <!-- dependency>
+        <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket</artifactId>
-            <version>${wicket.version}</version>
-        </dependency -->
+            <!-- version>${wicket.version}</version -->
+            <version>1.4.12</version>
+        </dependency>
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
