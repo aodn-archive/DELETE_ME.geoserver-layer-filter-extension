@@ -42,17 +42,15 @@
             <groupId>org.geoserver.web</groupId>
             <artifactId>gs-web-core</artifactId>
             <version>${geoserver.version}</version>
-
             <scope>provided</scope>
         </dependency>
 
-        <!-- dependency>
+        <dependency>
             <groupId>org.geoserver</groupId>
             <artifactId>gs-wfs</artifactId>
             <version>${geoserver.version}</version>
-
             <scope>provided</scope>
-        </dependency -->
+        </dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
