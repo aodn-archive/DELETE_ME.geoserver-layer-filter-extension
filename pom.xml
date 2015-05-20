@@ -23,6 +23,7 @@
         <artifactId>geoserver</artifactId>
         <version>1.0.0</version>
         <!-- relativePath>../geoserver/c</relativePath -->
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
 
@@ -34,6 +35,58 @@
             <url>http://repo.boundlessgeo.com/main</url>
         </repository>
     </repositories -->
+
+    <!-- why don't we specify the pom as the depenency?  -->
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.geoserver.web</groupId>
+                <artifactId>gs-web-core</artifactId>
+                <version>${geoserver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.geoserver</groupId>
+                <artifactId>gs-wfs</artifactId>
+                <version>${geoserver.version}</version>
+            </dependency>
+
+           <!-- dependency>
+                <groupId>org.geoserver.web</groupId>
+                <artifactId>gs-web-wfs</artifactId>
+                <version>${geoserver.version}</version>
+            </dependency -->
+
+
+            <!-- dependency>
+               <groupId>org.geoserver</groupId>
+               <artifactId>gs-main</artifactId>
+                <version>${geoserver.version}</version>
+            </dependency -->
+         
+
+
+            <!--dependency>
+                <groupId>org.geoserver.web</groupId>
+                <artifactId>gs-web-app</artifactId>
+                <version>${geoserver.version}</version>
+                <type>pom</type>
+            </dependency -->
+
+            <!--dependency>
+                <groupId>org.geoserver</groupId>
+                <artifactId>gs-xslt</artifactId>
+                <version>${geoserver.version}</version>
+            </dependency -->
+            
+
+        </dependencies>
+    </dependencyManagement>
+
+
+
 
     <dependencies>
         <dependency>
