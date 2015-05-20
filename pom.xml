@@ -53,6 +53,15 @@
         </dependency>
 
         <dependency>
+            <!-- should we coordinate versioning across modules at top level pom? -->
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket</artifactId>
             <!-- version>${wicket.version}</version -->
